@@ -13,5 +13,4 @@ function g = graphGenerator(cities)
     
     g = graph(row1,row2);
     
-    
 end
