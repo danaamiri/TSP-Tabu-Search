@@ -32,6 +32,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function result = TabuSearch(problem, solutionResult, iteration)
+    clc
     %begin
     initial = makeProblem(problem);
     answer = solutionResult;
@@ -41,9 +42,11 @@ function result = TabuSearch(problem, solutionResult, iteration)
     
     %intialization
     currentSolution = initial;
+    bestSolution = currentSolution;
     tabuTenure = round(sqrt(n));
     tabuList = zeros(n);
     currentCost = evaluation(currentSolution);
+    bestCost = currentCost;
     plotSolution(currentSolution);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 %   ____ ___ ____ ____ ___    ____ _    ____ ____ ____ _ ___ _  _ _  _   %
@@ -52,6 +55,56 @@ function result = TabuSearch(problem, solutionResult, iteration)
 %                                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                                
     for counter = 1:bound
-        
+        successors = getSuccessors(currentSolution,20);
+        best = getBestSuccessors(successors);
+        bestMat = best.matrix;
+        bestMove = best.moves;
+        bestEval = best.evaluation;
+        while(true)
+           if(tabuList(besteMov(1),bestEval(2))>0)
+               if(bestEval < bestCost)
+                   bestSolution = bestMat;
+                   bestCost = bestEval;
+                   currentSolution = bestMat;
+                   currentCost = bestEval;
+                   break;
+               else
+                   best = getBestSuccessors(successors);
+                   bestMat = best.matrix;
+                   bestMove = best.moves;
+                   bestEval = best.evaluation;
+               end
+           else
+               if(bestEval < bestCost)
+                   bestSolution = bestMat;
+                   bestCost = bestEval;
+                   currentSolution = bestMat;
+                   currentCost = bestEval;
+                   break;
+               end
+           end
+        end
+        tabuList(bestMove(1),bestMove(2)) = tabuTenure;
+        tabuList(bestMove(2),bestMove(1)) = tabuTenure;
+        bestSolution
+        bestCost
     end
+    result = bestCost;
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
