@@ -56,28 +56,28 @@ function result = TabuSearch(problem, solutionResult, iteration)
 %                                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                                
     for counter = 1:bound
-        successors = getSuccessors(currentSolution,50);
+        successors = getSuccessors(currentSolution,100);
         best = getBestSuccessors(successors);
         bestMat = best.matrix;
         bestMove = best.moves;
         bestEval = best.evaluation;
-        bestIndex = best.index;
         tabuList(tabuList > 0 ) =  tabuList(tabuList > 0 ) - 1;
         while(true)
            if(tabuList(bestMove(1),bestMove(2))>0)
+               
                if(bestEval < bestCost)
                    bestSolution = bestMat;
                    bestCost = bestEval;
                    break;
                else
+                    tabuList(bestMove(1),bestMove(2)) = tabuList(bestMove(1),bestMove(2)) +  n;
+                    tabuList(bestMove(2),bestMove(1)) = tabuList(bestMove(2),bestMove(1)) + n;
                     successors = removeSuccessor(best,successors);
                     best = getBestSuccessors(successors);
                     bestMat = best.matrix;
                     bestMove = best.moves;
-                    bestIndex = best.index;
                     bestEval = best.evaluation;
-                    if(bestEval > 100000000000)
-                        successors
+                    if(bestEval == Inf)
                         break;
                     end
                end
@@ -91,18 +91,16 @@ function result = TabuSearch(problem, solutionResult, iteration)
            
         end
         currentSolution = bestMat;
-        currentCost = bestEval;
-        tabuList(bestMove(1),bestMove(2)) = 50;
-        tabuList(bestMove(2),bestMove(1)) = 50;
+        tabuList(bestMove(1),bestMove(2)) = tabuList(bestMove(1),bestMove(2)) +  n;
+        tabuList(bestMove(2),bestMove(1)) = tabuList(bestMove(2),bestMove(1)) + n;
         clc
-        %fprintf('%d [%d,%d]\n',bestSolution(:,1));
         bestSolution
         fprintf('Best path cost visited : %03d',round(bestCost));
-        answerMat=[answerMat;[counter,bestCost]];
+        %answerMat=[answerMat;[counter,bestCost]];
         %plot(answerMat);
         counter
         plotSolution(bestSolution, currentSolution);
-        %pause(0.000000001);
+        pause(0.0000000000001);
     end
     result = bestCost;
 end
