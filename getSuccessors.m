@@ -1,9 +1,10 @@
-function [neighbors , swaplist , evals] = getSuccessors (matrix,n)
-  
-  combs = combnk (2 : size(matrix,1)-1 , 2) ;
-  
-  a = randperm (size(combs,1));
-  b = a (1:n);
+function s = getSuccessors (matrix,n)
+  sz = size(matrix,1)-1;
+  combs = combnk (2 : sz , 2);
+  n = size(combs,1);
+  %a = randperm (size(combs,1));
+  a = [1:size(combs,1)];
+  b = a(1:n);
   
   for i = 1 : n
     
@@ -33,7 +34,9 @@ function [neighbors , swaplist , evals] = getSuccessors (matrix,n)
   
   end
   
-  swaplist
-  evals
+  nF = 'neighbors';
+  slF = 'swaplist';
+  evF = 'evals';
+  s = struct(nF,neighbors,slF,swaplist,evF,evals);
   
 end

@@ -47,7 +47,8 @@ function result = TabuSearch(problem, solutionResult, iteration)
     tabuList = zeros(n);
     currentCost = evaluation(currentSolution);
     bestCost = currentCost;
-    plotSolution(currentSolution);
+    plotSolution(bestSolution,currentSolution);
+    answerMat = [0,bestCost];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 %   ____ ___ ____ ____ ___    ____ _    ____ ____ ____ _ ___ _  _ _  _   %
 %   [__   |  |__| |__/  |     |__| |    | __ |  | |__/ |  |  |__| |\/|   % 
@@ -55,39 +56,53 @@ function result = TabuSearch(problem, solutionResult, iteration)
 %                                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                                
     for counter = 1:bound
-        successors = getSuccessors(currentSolution,20);
+        successors = getSuccessors(currentSolution,50);
         best = getBestSuccessors(successors);
         bestMat = best.matrix;
         bestMove = best.moves;
         bestEval = best.evaluation;
+        bestIndex = best.index;
+        tabuList(tabuList > 0 ) =  tabuList(tabuList > 0 ) - 1;
         while(true)
-           if(tabuList(besteMov(1),bestEval(2))>0)
+           if(tabuList(bestMove(1),bestMove(2))>0)
                if(bestEval < bestCost)
                    bestSolution = bestMat;
                    bestCost = bestEval;
-                   currentSolution = bestMat;
-                   currentCost = bestEval;
                    break;
                else
-                   best = getBestSuccessors(successors);
-                   bestMat = best.matrix;
-                   bestMove = best.moves;
-                   bestEval = best.evaluation;
+                    successors = removeSuccessor(best,successors);
+                    best = getBestSuccessors(successors);
+                    bestMat = best.matrix;
+                    bestMove = best.moves;
+                    bestIndex = best.index;
+                    bestEval = best.evaluation;
+                    if(bestEval > 100000000000)
+                        successors
+                        break;
+                    end
                end
            else
                if(bestEval < bestCost)
                    bestSolution = bestMat;
                    bestCost = bestEval;
-                   currentSolution = bestMat;
-                   currentCost = bestEval;
-                   break;
-               end
+               end   
+               break;
            end
+           
         end
-        tabuList(bestMove(1),bestMove(2)) = tabuTenure;
-        tabuList(bestMove(2),bestMove(1)) = tabuTenure;
+        currentSolution = bestMat;
+        currentCost = bestEval;
+        tabuList(bestMove(1),bestMove(2)) = 50;
+        tabuList(bestMove(2),bestMove(1)) = 50;
+        clc
+        %fprintf('%d [%d,%d]\n',bestSolution(:,1));
         bestSolution
-        bestCost
+        fprintf('Best path cost visited : %03d',round(bestCost));
+        answerMat=[answerMat;[counter,bestCost]];
+        %plot(answerMat);
+        counter
+        plotSolution(bestSolution, currentSolution);
+        %pause(0.000000001);
     end
     result = bestCost;
 end
