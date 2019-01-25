@@ -1,20 +1,23 @@
-function x =  plotSolution(cities)
+function x =  plotSolution(best,current)
     x = [];
     y = [];
-    g = graphGenerator(cities);
-    
-    sz = size(cities);
+    g = graphGenerator(best);
+    gs = graphGenerator(current);
+    sz = size(best);
     n = sz(1);
     
     for i = 1:n
-       temp = cities(i,:);
+       temp = best(i,:);
        x = [x,temp(2)];
     end
     
     for i = 1:n
-       temp = cities(i,:);
+       temp = best(i,:);
        y = [y,temp(3)];
     end
-    
-    plot(g,'Xdata',x,'Ydata',y);
+    p= plot(g,'Xdata',-y,'Ydata',x,'LineWidth',3);
+    p.MarkerSize = 5;
+    hold on;
+    plot(gs,'Xdata',-y,'Ydata',x,'LineWidth',1);
+    hold off;
 end
